@@ -19,7 +19,7 @@ def solve(u, time, opened, value, solution):
   for v in set(flow.keys()) - set(opened):
     remaining_time = time - shortest_paths[u][v] - 1
     if remaining_time < 0: continue
-    solve(v, remaining_time, frozenset(opened | {v}), value + remaining_time * flow[v], solution)
+    solution = solve(v, remaining_time, frozenset(opened | {v}), value + remaining_time * flow[v], solution.copy())
   return solution
 
 me = solve('AA', 26, frozenset(), 0, dict())
