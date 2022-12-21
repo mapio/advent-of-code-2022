@@ -39,7 +39,7 @@ def next_states(costs, r, o):
     yield r + ByKind(ore = 1), o - costs['ore'] + r
   yield r, o + r
 
-MAX_T = 24
+MAX_T = 32
 
 def visit(costs, r0, o0):
 
@@ -75,10 +75,10 @@ def visit(costs, r0, o0):
 
 with ProcessPoolExecutor() as executor:
     future_to_idx = dict() 
-    for line in fileinput.input():
+    for line in list(fileinput.input())[:3]:
       idx, costs = parse(line)
       future_to_idx[executor.submit(visit, costs, ByKind(ore = 1), ByKind())] = idx
-    sol = 0
+    prod = 1
     for future in as_completed(future_to_idx):
         idx = future_to_idx[future]
         try:
@@ -87,7 +87,7 @@ with ProcessPoolExecutor() as executor:
             print(f'blueprint {idx} generated an exception {exc}')
         else:
             print(f'blueprint {idx} value is {val}')
-            sol += idx * val
+            prod *= val
 
-print(f'Solution is: {sol}')
+print(f'Solution is: {prod}')
 
