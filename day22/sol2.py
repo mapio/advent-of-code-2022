@@ -115,7 +115,7 @@ def setmaps():
   FM['A'].north = lambda pd: PD('F', [c(pd) ,0], '>')
   FM['A'].east  = f('B')
   FM['A'].south = f('C')
-  FM['A'].west  = lambda pd: PD('D', [0, invr(pd)], '>')
+  FM['A'].west  = lambda pd: PD('D', [invr(pd), 0], '>')
 
   FM['B'].north = f('F')
   FM['B'].east  = lambda pd: PD('E', [invr(pd), N - 1], '<')
@@ -130,7 +130,7 @@ def setmaps():
   FM['D'].north = lambda pd: PD('C', [c(pd), 0], '>')
   FM['D'].east  = f('E')
   FM['D'].south = f('F')
-  FM['D'].west  = lambda pd: PD('A', [0, invr(pd)], '>')
+  FM['D'].west  = lambda pd: PD('A', [invr(pd), 0 ], '>')
 
   FM['E'].north = f('C')
   FM['E'].east  = lambda pd: PD('B', [invr(pd), N -1], '<')
@@ -138,24 +138,25 @@ def setmaps():
   FM['E'].west  = f('D')
 
   FM['F'].north = f('D')
-  FM['F'].east  = lambda pd: PD('E', [r(pd), N - 1], '^')
+  FM['F'].east  = lambda pd: PD('E', [N - 1, r(pd)], '^')
   FM['F'].south = lambda pd: PD('B', [0, c(pd)], 'v')
   FM['F'].west  = lambda pd: PD('A', [0, r(pd)], 'v')
 
 setmaps()
 ##########
 
-for d in range(4):
-  print('Dir:', MDIR[d], end = ' ')
-  for face in 'ABCDEF':
-    print(face, end = '')
-    errors = False
-    for r in range(N):
-      for c in range(N):
-        pd0 = PD(face, [r, c], d)
-        pd = pd0
-        for _ in range(4 * N):
-          pd = pd.move()
-        if pd != pd0: errors = True
-    print('!' if errors else ' ', end = ' ')
-  print()
+if True:
+  for d in range(4):
+    print('Dir:', MDIR[d], end = ' ')
+    for face in 'ABCDEF':
+      print(face, end = '')
+      errors = False
+      for r in range(N):
+        for c in range(N):
+          pd0 = PD(face, [r, c], d)
+          pd = pd0
+          for _ in range(4 * N):
+            pd = pd.move()
+          if pd != pd0: errors = True
+      print('!' if errors else ' ', end = ' ')
+    print()
