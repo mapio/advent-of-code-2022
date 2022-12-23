@@ -4,9 +4,9 @@ import numpy as np
 import re
 from math import sqrt 
 
-it = iter(fileinput.input())
-
 ##########
+
+it = iter(fileinput.input())
 
 M = []
 N2 = 0
@@ -20,6 +20,10 @@ for line in it:
 N = int(sqrt(N2//6))
 R = len(M) // N
 C //= N
+
+MOVES = next(it).strip()
+
+##########
 
 @dataclass
 class Face:
@@ -89,6 +93,12 @@ class PD:
   rc: np.array = np.array([0, 0])
   d: int = 0
 
+  def val(self):
+    return self.face.M[self.rc[0]][self.rc[1]]
+
+  def orc(self):
+    return self.face.O[self.rc[0]][self.rc[1]]
+
   def move(self):
     ppd = PD(self.face, self.rc + DIR[self.d], self.d)
     out = self.face.out(ppd.rc)
@@ -143,9 +153,8 @@ def setmaps():
   FM['F'].west  = lambda pd: PD('A', [0, r(pd)], 'v')
 
 setmaps()
-##########
 
-if True:
+if False:
   for d in range(4):
     print('Dir:', MDIR[d], end = ' ')
     for face in 'ABCDEF':
@@ -160,3 +169,31 @@ if True:
           if pd != pd0: errors = True
       print('!' if errors else ' ', end = ' ')
     print()
+
+##########
+
+def move(pd, dist):
+  while dist > 0:
+    opd = pd
+    pd = pd.move()
+    v = pd.val()
+    if v == '.': dist -= 1
+    elif v == '#': 
+      print('bump')
+      return opd
+  return pd
+
+face = FM['A']
+pd = PD('A', [0, 0], '>')
+
+for m in re.findall(r'\d+|R|L', MOVES):
+  print(pd)
+  if m == 'R':
+    pd.d = (pd.d + 1) % 4
+  elif m == 'L':
+    pd.d = (pd.d - 1) % 4
+  else:
+    pd = move(pd, int(m))
+
+r, c = pd.orc()
+print(1000 * r + 4 * c + pd.d)
