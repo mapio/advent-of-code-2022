@@ -178,16 +178,13 @@ def move(pd, dist):
     pd = pd.move()
     v = pd.val()
     if v == '.': dist -= 1
-    elif v == '#': 
-      print('bump')
-      return opd
+    elif v == '#': return opd
   return pd
 
 face = FM['A']
 pd = PD('A', [0, 0], '>')
 
 for m in re.findall(r'\d+|R|L', MOVES):
-  print(pd)
   if m == 'R':
     pd.d = (pd.d + 1) % 4
   elif m == 'L':
@@ -196,4 +193,4 @@ for m in re.findall(r'\d+|R|L', MOVES):
     pd = move(pd, int(m))
 
 r, c = pd.orc()
-print(1000 * r + 4 * c + pd.d)
+print(1000 * (1 + r) + 4 * (1 + c) + pd.d)
