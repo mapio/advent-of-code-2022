@@ -71,13 +71,13 @@ def pe(elves):
 
 elves = ELVES
 p = 0
-for rn in range(1, 11):
+rn = 0
+while True:
+  rn += 1
   nextelves = round(elves, p)
   if nextelves == elves: break
   p = (p + 1) % 4
   elves = nextelves
 
-mr, Mr = min(map(itemgetter(0), elves)), max(map(itemgetter(0), elves))
-mc, Mc = min(map(itemgetter(1), elves)), max(map(itemgetter(1), elves))
-
-print((1 + Mc - mc) * (1 + Mr - mr) - len(elves))
+print(rn)
+pe(elves)
